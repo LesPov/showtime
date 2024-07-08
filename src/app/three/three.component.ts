@@ -1,14 +1,12 @@
-import { Component, ElementRef, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, AfterViewInit  } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { ThreeCameraService } from './components/camera';
-import { ThreeRendererService } from './components/renderer';
-import { ThreeSceneService } from './components/scene';
-import { ThreeControlService } from './components/controls';
-import { ThreeAnimationService } from './components/animation';
-import { ThreeGridService } from './components/grid';
+import { setupRenderer } from './components/renderer';
+import { setupCamera } from './components/camera';
+import { setupOrbitControls } from './components/controls';
+import { createAxis } from './components/ejes';
 
 @Component({
   selector: 'app-three',
@@ -17,54 +15,52 @@ import { ThreeGridService } from './components/grid';
   templateUrl: './three.component.html',
   styleUrls: ['./three.component.css'],
 })
-export class ThreeComponent implements OnInit, AfterViewInit {
-  @ViewChild('canvas') canvasRef!: ElementRef;
+export class ThreeComponent implements AfterViewInit {
 
-  private renderer!: THREE.WebGLRenderer;
-  private scene!: THREE.Scene;
-  private camera!: THREE.PerspectiveCamera;
-  private controls!: OrbitControls;
-
-  constructor(
-    private rendererService: ThreeRendererService,
-    private sceneService: ThreeSceneService,
-    private cameraService: ThreeCameraService,
-    private controlService: ThreeControlService,
-    private animationService: ThreeAnimationService,
-    private gridService: ThreeGridService
-
-  ) {}
-
-  ngOnInit() {
-    // Inicialización básica si es necesaria
-  }
-
-  ngAfterViewInit() {
-    this.initThreeJS();
-  }
-
-  initThreeJS() {
-    const canvas = this.canvasRef.nativeElement;
-
-    // Configuración del renderizador
-    this.renderer = this.rendererService.initRenderer(canvas);
+  ngAfterViewInit(): void {
+    const width = window.innerWidth, height = window.innerHeight;
+    
+     // Configuración del renderizador
+     const renderer = setupRenderer(width, height);
 
     // Configuración de la escena
-    this.scene = this.sceneService.initScene();
+    const scene = new THREE.Scene(); // Crea una nueva escena
 
+   
     // Configuración de la cámara
-    this.camera = this.cameraService.initCamera(window.innerWidth / window.innerHeight);
+    const camera = setupCamera(width, height);
 
     // Configuración de los controles de órbita
-    this.controls = this.controlService.initControls(this.camera, this.renderer.domElement);
+    const orbit = setupOrbitControls(camera, renderer);
 
-    // Añadir la cuadrícula a la escena
-    this.gridService.addGrid(this.scene);
+    // Crear ejes
+    createAxis(scene);
 
 
-    // Inicia la animación
-    this.animationService.init(this.renderer, this.scene, this.camera, this.controls);
+    // Añade el primer cubo
+    const geometry1 = new THREE.BoxGeometry(1, 1, 1); // Crea la geometría del cubo con dimensiones 1x1x1
+    const material1 = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Crea un material básico de color verde
+    const cube1 = new THREE.Mesh(geometry1, material1); // Crea una malla combinando la geometría y el material
+    scene.add(cube1);  // Añade el cubo a la escena
+
+    // Añade el segundo cubo con dimensiones diferentes
+    const geometry2 = new THREE.BoxGeometry(5, 5, 0.01); // Crea la geometría del cubo con dimensiones 2x1.5x1
+    const material2 = new THREE.MeshBasicMaterial({ color: 0xffffff }); // Crea un material básico de color rojo
+    const cube2 = new THREE.Mesh(geometry2, material2); // Crea una malla combinando la geometría y el material
+    cube2.position.set(4, 2.5, 0); // Coloca el segundo cubo a la derecha del primer cubo
+    scene.add(cube2); // Añade el cubo a la escena
+
+    // Función de animación
+    function animate() {
+      requestAnimationFrame(animate); // Solicita que la función de animación se ejecute en el próximo cuadro de animación
+
+      orbit.update(); // Actualiza los controles de órbita en cada cuadro para aplicar el amortiguamiento
+
+      renderer.render(scene, camera); // Renderiza la escena desde la perspectiva de la cámara
+    }
+
+    // Llama a la función de animación para iniciar el bucle de animación
+    animate();
+
   }
-
-
 }

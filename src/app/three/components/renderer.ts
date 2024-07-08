@@ -1,22 +1,10 @@
-// three-renderer.service.ts
-import { Injectable } from '@angular/core';
+// src/app/three/components/renderer.ts
 import * as THREE from 'three';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class ThreeRendererService {
-  private renderer!: THREE.WebGLRenderer;
-
-  initRenderer(canvas: HTMLCanvasElement): THREE.WebGLRenderer {
-    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-    this.renderer.setPixelRatio(window.devicePixelRatio);
-    this.renderer.localClippingEnabled = true; // Asegura que está habilitado
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-    return this.renderer;
-  }
-
-  getRenderer(): THREE.WebGLRenderer {
-    return this.renderer;
-  }
+export function setupRenderer(width: number, height: number): THREE.WebGLRenderer {
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(width, height);
+  document.body.appendChild(renderer.domElement);
+  return renderer;
 }

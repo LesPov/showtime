@@ -1,25 +1,14 @@
-// three-control.service.ts
-import { Injectable } from '@angular/core';
+// control.ts
+
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class ThreeControlService {
-  private controls!: OrbitControls;
-
-  initControls(camera: THREE.PerspectiveCamera, rendererDomElement: HTMLElement): OrbitControls {
-    this.controls = new OrbitControls(camera, rendererDomElement);
-    this.controls.enableDamping = true;
-    this.controls.dampingFactor = 0.25;
-    this.controls.maxPolarAngle = Math.PI / 2;
-    this.controls.minPolarAngle = 0;
-    this.controls.update();
-    return this.controls;
-  }
-
-  getControls(): OrbitControls {
-    return this.controls;
-  }
+export function setupOrbitControls(camera: THREE.PerspectiveCamera, renderer: THREE.WebGLRenderer): OrbitControls {
+  const orbit = new OrbitControls(camera, renderer.domElement);
+  orbit.enableDamping = true;
+  orbit.dampingFactor = 0.25;
+  orbit.maxPolarAngle = Math.PI / 2;
+  orbit.minPolarAngle = 0;
+  orbit.update();
+  return orbit;
 }
