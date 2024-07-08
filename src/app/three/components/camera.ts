@@ -1,8 +1,20 @@
+// three-camera.service.ts
+import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 
-export function setupCamera(): THREE.PerspectiveCamera {
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.set(0, 2, 5);
+@Injectable({
+  providedIn: 'root',
+})
+export class ThreeCameraService {
+  private camera!: THREE.PerspectiveCamera;
 
-  return camera;
+  initCamera(aspectRatio: number): THREE.PerspectiveCamera {
+    this.camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 3000);
+    this.camera.position.set(0, 5, 50);
+    return this.camera;
+  }
+
+  getCamera(): THREE.PerspectiveCamera {
+    return this.camera;
+  }
 }
