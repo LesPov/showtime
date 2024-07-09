@@ -11,15 +11,31 @@ export function setupOrbitControls(camera: THREE.PerspectiveCamera, renderer: TH
   orbit.minPolarAngle = 0;
   orbit.update();
 
-  const maxDistance = 100; // Distancia máxima permitida
+  const minDistance = 30; // Distancia mínima permitida
+  const maxDistance = 90; // Distancia máxima permitida
 
-  // Limita la distancia máxima de la cámara al centro de la escena
+  // Limita la distancia de la cámara al centro de la escena
   orbit.addEventListener('change', () => {
     const distance = camera.position.length(); // Calcula la distancia actual de la cámara al origen (centro de la escena)
-    if (distance > maxDistance) {
+
+    // Limita la distancia mínima y máxima
+    if (distance < minDistance) {
+      const direction = camera.position.clone().normalize(); // Obtiene la dirección actual de la cámara
+      const targetPosition = direction.multiplyScalar(minDistance); // Calcula la nueva posición de la cámara a la distancia mínima
+      camera.position.copy(targetPosition); // Aplica la nueva posición a la cámara
+      orbit.update(); // Actualiza los controles después de ajustar la posición
+    } else if (distance > maxDistance) {
       const direction = camera.position.clone().normalize(); // Obtiene la dirección actual de la cámara
       const targetPosition = direction.multiplyScalar(maxDistance); // Calcula la nueva posición de la cámara a la distancia máxima
       camera.position.copy(targetPosition); // Aplica la nueva posición a la cámara
+      orbit.update(); // Actualiza los controles después de ajustar la posición
+    }
+  });
+
+  // Función para limitar el movimiento en el eje Y negativo
+  orbit.addEventListener('change', () => {
+    if (camera.position.y < 0) {
+      camera.position.setY(0); // Limita la posición mínima en el eje Y a 0
       orbit.update(); // Actualiza los controles después de ajustar la posición
     }
   });

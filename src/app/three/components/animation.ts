@@ -8,6 +8,7 @@ export function animate(renderer: THREE.WebGLRenderer, scene: THREE.Scene, camer
         requestAnimationFrame(animateInternal);
         orbit.update();
         renderer.render(scene, camera);
+        
     }
 
     animateInternal();

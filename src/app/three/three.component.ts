@@ -9,6 +9,8 @@ import { createAxis } from './components/ejes';
 import { addGrid } from './components/grid';
 import { addCubes } from './components/cube';
 import { animate } from './components/animation';
+import { initAxisControls } from './components/axisControls';
+import { setupOrthoCamera } from './components/orthocamera';
 
 @Component({
   selector: 'app-three',
@@ -30,7 +32,9 @@ export class ThreeComponent implements AfterViewInit {
 
     // Configuración de la cámara
     const camera = setupCamera(width, height);
-
+    
+ // Configuración de la cámara ortográfica para los ejes
+//  const orthoCamera = setupOrthoCamera(width, height);
     // Configuración de los controles de órbita
     const orbit = setupOrbitControls(camera, renderer);
 
@@ -45,5 +49,7 @@ export class ThreeComponent implements AfterViewInit {
     // Llamar a la función de animación
     animate(renderer, scene, camera, orbit);
 
+    // Inicializar controles de ejes
+    initAxisControls(camera, orbit);
   }
 }

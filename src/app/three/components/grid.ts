@@ -3,8 +3,8 @@ import * as THREE from 'three';
 
 // Función para añadir una cuadrícula a la escena
 export function addGrid(scene: THREE.Scene) {
-    const size = 20; // Tamaño de la cuadrícula
-    const divisions = 20; // Número de divisiones en la cuadrícula
+    const size = 28; // Tamaño de la cuadrícula
+    const divisions = 28; // Número de divisiones en la cuadrícula
 
     // Cuadrícula horizontal en el plano XY
     const gridHelper = new THREE.GridHelper(size, divisions, 0x444444);
@@ -17,7 +17,7 @@ export function addGrid(scene: THREE.Scene) {
     const verticalGridHelperXZ = new THREE.GridHelper(size, divisions, 0x444444);
     verticalGridHelperXZ.material.opacity = 0.2;
     verticalGridHelperXZ.material.transparent = true;
-    verticalGridHelperXZ.position.set(0, 10, 0);
+    verticalGridHelperXZ.position.set(0, 14, 0);
     verticalGridHelperXZ.rotation.x = Math.PI / 2;
     scene.add(verticalGridHelperXZ);
 
@@ -25,7 +25,7 @@ export function addGrid(scene: THREE.Scene) {
     const verticalGridHelperYZ = new THREE.GridHelper(size, divisions, 0x444444);
     verticalGridHelperYZ.material.opacity = 0.2;
     verticalGridHelperYZ.material.transparent = true;
-    verticalGridHelperYZ.position.set(0, 10, 0);
+    verticalGridHelperYZ.position.set(0, 14, 0);
     verticalGridHelperYZ.rotation.z = Math.PI / 2;
     scene.add(verticalGridHelperYZ);
 }
