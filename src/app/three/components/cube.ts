@@ -6,13 +6,12 @@ export function addCubes(scene: THREE.Scene) {
     const geometry1 = new THREE.BoxGeometry(0.2, 0.2, 0.2);
     const material1 = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     const cube1 = new THREE.Mesh(geometry1, material1);
-    cube1.position.set(0, 0, 0);
     scene.add(cube1);
 }
 
 // Función para crear cubos en una circunferencia
 export function createCircleCubes(scene: THREE.Scene) {
-    const radius = 5; // Radio de la circunferencia
+    const radius = 4.9; // Radio de la circunferencia
     const cubeCount = 28; // Número de cubos
     const angleStep = (2 * Math.PI) / cubeCount; // Paso angular
 
@@ -29,7 +28,10 @@ export function createCircleCubes(scene: THREE.Scene) {
         color.setHSL(i / cubeCount, 1.0, 0.5);
         const material = new THREE.MeshBasicMaterial({ color: color });
 
+        // Crear malla del cubo
         const cube = new THREE.Mesh(geometry, material);
+
+      
 
         // Posicionar el cubo
         cube.position.set(x, 0.5, z); // Ajustar la posición en los ejes X y Z
