@@ -11,7 +11,7 @@ export function setupOrbitControls(camera: THREE.PerspectiveCamera, renderer: TH
   orbit.minPolarAngle = 0;
   orbit.update();
 
-  const minDistance = 30; // Distancia mínima permitida
+  const minDistance = 10; // Distancia mínima permitida
   const maxDistance = 90; // Distancia máxima permitida
 
   // Limita la distancia de la cámara al centro de la escena
